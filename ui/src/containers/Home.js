@@ -71,7 +71,7 @@ const Home = () =>{
                      </Link>
                 </Menu.Item>
                 <Menu.Item style={styles.menuItem} icon={<FileDoneOutlined style={styles.icon} />} >
-                    <Link to="/teachers">
+                    <Link to="/blog">
                       Blog
                     </Link>
                 </Menu.Item>
@@ -115,7 +115,7 @@ const Home = () =>{
                       <Route exact path='/profile' component={Profile} />
                     </Col>
                     <Col>
-                    <Route exact path='/teachers' component={Blog} />
+                    <Route exact path='/blog' component={Blog} />
                     </Col>
                     {window.innerWidth > 800 && 
                     <Col>

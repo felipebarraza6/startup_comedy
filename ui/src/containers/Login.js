@@ -124,7 +124,7 @@ const Login = () => {
    return(
         <div className="general-login">
           <div className="login-container">
-            <img src={logo} alt='logo' />
+            <img src={logo} style={{width:'100%'}} alt='logo' />
             <div className="login">
               <Form
                 onFinish = { handleFormSubmit }
@@ -226,10 +226,7 @@ const Login = () => {
                 <Form.Item>
                   {data.isSubmitting ? <Spin />
                     : <Button type="primary" htmlType="submit" className="login-form-button">Aceptar</Button>}
-                  {data.createUser === false ?
-                      <Button onClick={()=> setData({ ...data, createUser:true})}  style={{marginLeft:'20px'}}>Crear Usuario</Button>:
-                      <Button danger  onClick={()=> setData({ ...data, createUser:false})}  style={{marginLeft:'20px'}}>Cancelar</Button>
-                  }
+                  
                 </Form.Item>
               </Form>
             </div>
