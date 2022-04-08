@@ -1,14 +1,12 @@
-import React, {useEffect,useReducer} from 'react'
-
+import React, { useReducer, useEffect } from 'react'
 import {login_reducer} from './reducers/auth'
 import api from '../src/api/endpoints'
 import './App.css'
 
 import Home from './containers/Home'
 import Login from './containers/Login'
-import {INSTANCE_OAUTH2} from './api/config'
-
 export const AuthContext = React.createContext()
+
 
 const initialState = {
   isAuthenticated: false,

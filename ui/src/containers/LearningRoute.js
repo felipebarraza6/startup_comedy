@@ -16,7 +16,6 @@ const LearningRoute = () => {
       setLoading(true)
 
       const request = await api.courses.get_courses().then((response)=> {
-
         setModules(response.results)
         setLoading(false)
       })
@@ -28,44 +27,29 @@ const LearningRoute = () => {
   },[])
 
   return(
-    <Row align='middle' justify='space-around'>
+    <>
     {loading ? <Skeleton/ >:
     <Col style={{marginTop:'3%'}}>
     <Timeline
         style={{backgroundColor:'white', padding:'70px', borderRadius:'15px', boxShadow:'10px 10px 10px rgba(0, 0, 0, 0.5)'}}
       >      
-      {modules.map((module)=> {
-        var color= 'red'
+      {approved < 1 && <>
+        <Timeline.Item color={'red'}>SIN CURSOS APROBADOS...</Timeline.Item>
+        </>}
+      {approved.map((module)=> {
+        var color= 'green'
         var aproved_course  = false
         var date_aprovedd = ''
         var code = ''
-        if(approved.length > 0){
-          approved.map((module_approved)=> {
-            if(module_approved.course.id===module.id){
-              console.log(module_approved.created)
-              date_aprovedd = module_approved.created.slice(0,10)
-              aproved_course = true
-              color='green'
-              code = module_approved.code_travel
-            }
-            
-          })
-        }
-
+        
         return(
           <Timeline.Item 
               color={color}  
               key={module.id}>
-                {module.title} {aproved_course && 
-                    <>
-                      <Tag>
-                        {date_aprovedd}
-                      </Tag>
-                      <Tag color='green'>
-                        {code}
-                      </Tag>
-                    </> 
-                } 
+                {module.course.title}
+                <Tag color='green' style={{marginLeft:'10px'}} >
+                  {module.created.slice(0,10)}
+                </Tag>
             </Timeline.Item>
         )
 
@@ -73,7 +57,7 @@ const LearningRoute = () => {
     </Timeline>
     </Col>
     }
-    </Row>
+    </>
   )
 
 }

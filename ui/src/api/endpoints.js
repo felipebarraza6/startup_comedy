@@ -2,7 +2,31 @@ import { POST_LOGIN, GET, POST} from './config'
 
 
 const get_courses = async() => {
-  const request = await GET('courses/')
+  const request = await GET(`courses/?is_free=true`)
+  return request.data
+}
+
+const get_courses_authorized = async() => {
+  const user = JSON.parse(localStorage.getItem('user') || null)
+  const request = await GET(`courses/?is_free=false&authorized_user=${user.id}`)
+  return request.data
+}
+
+const create_view_video = async(data) => {
+  const user = JSON.parse(localStorage.getItem('user') || null) 
+  const request = await POST('view_video/', {...data, user:user.id})
+  return request.data
+}
+
+const list_view_video = async({course}) => {
+  const user = JSON.parse(localStorage.getItem('user') || null)
+  const request = await GET(`view_video/?user=${user.id}&course=${course}`)
+  return request.data
+}
+
+const last_view_video = async() => {
+  const user = JSON.parse(localStorage.getItem('user') || null)
+  const request = await GET(`view_video/?user=${user.id}`)
   return request.data
 }
 
@@ -21,6 +45,16 @@ const get_retrieve_course = async(id) => {
 const send_initial_test = async(data) => {
   const request = await POST('tests/1/finish_test/', {'answers': data})
   return request.data
+}
+
+const get_blogs = async(data) => {
+  const request = await GET('blogs/')
+  return request
+}
+
+const create_comment = async(data) => {
+  const request = await POST('comments/', data)
+  return request
 }
 
 const get_initial_test = async() => {
@@ -69,7 +103,17 @@ const api = {
   courses: {
     get_courses,
     finish_course,
-    get_retrieve_course
+    get_retrieve_course,
+    get_courses_authorized
+  },
+  viewsVideo: {
+    create_view_video,
+    list_view_video,
+    last_view_video
+  },
+  blogs: {
+    get_blogs,
+    create_comment
   }
 
 }

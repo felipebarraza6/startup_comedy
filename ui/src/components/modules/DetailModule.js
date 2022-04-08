@@ -5,6 +5,9 @@ import { ModulesContext } from '../../containers/Modules'
 import api from '../../api/endpoints'
 import { FileTwoTone } from '@ant-design/icons'
 import Evaluation from './Evaluation'
+import NavigateMenuCourse from './NavigateMenuCourse'
+import RetrieveVideo from './RetrieveVideo'
+import { AuthContext } from '../../App'
 const { Paragraph, Title } = Typography
 const { Step } = Steps
 
@@ -12,40 +15,51 @@ const { Step } = Steps
 const DetailModule = () => {
   
   const [state, setState] = useState({
-    module:null,
-    image: null,
+    modules:null,
     questions: null,
-    resources: null,
     title: null,
-    tutor_name: null,
-    videos: null,
+    video: null,
+    resources: null,
+    promotional_video: null,
+    promotional_description: null,
     description: null,
+    file_promotional: null,
 
   })
 
   const { dispatch, state:stateModules } = useContext(ModulesContext)
+  const { state:auth } = useContext(AuthContext)
   var is_approved = stateModules.is_approved
   var id_module = stateModules.module.id
-
+  var approved_courses = auth.user.profile.approved_courses 
 
   useEffect(()=> {
 
     async function get_module_retrieve(id_module) {
-      const request = await api.courses.get_retrieve_course(id_module).then((response)=>
+      const request = await api.courses.get_retrieve_course(id_module).then((response)=> {
+        console.log(response.questions)
+        approved_courses.filter((element)=> { 
+            if(element.course.id===id_module) { 
+              dispatch({
+                type:'SET_APPROVED',
+                is_approved: true
+              })
+            } 
+      }
+      )
+         
         setState({
           ...state,
-          module: response,
-          image: response.image,
+          modules: response.modules,
           questions: response.questions,
-          resources: response.resources,
           title: response.title,
-          tutor_name: response.tutor_name,
-          videos: response.videos,
           description: response.description,
-          current: 0
+          promotional_description: response.description_promotional,
+          promotional_video: response.promotional_video,
+          file_promotional: response.file_promotional,
         })
+        }
       )
-      return request
     }
     get_module_retrieve(id_module)
 
@@ -58,14 +72,12 @@ const DetailModule = () => {
         <Col>
           <PageHeader 
             title={`${stateModules.module.title}`}
-            onBack = {()=> dispatch(
-              {
+            onBack = {()=> dispatch({
                 type:'SET_VIEW', 
                 is_retrieve: false, 
                 module: null, 
                 is_approved: false
-              }
-            )}
+            })}
           />
         </Col>
         <Col>
@@ -74,47 +86,27 @@ const DetailModule = () => {
               color='blue' >Aprobado</Tag> : 
             <>
               <Tag style={styles.Tag}  
-                color='geekblue'>En proceso</Tag> <Spin size='small'/>
+                color='volcano'>
+                  En proceso
+              </Tag>
             </>}
         </Col>
       </Row>
       <Row>
-        <Col span={8} style={{padding:'30px'}}>
-          <Paragraph style={{marginBottom:'50px'}}>{state.description}</Paragraph>
-          {state.resources && 
-            <Row>
-            <Title level={4}>Recursos Disponibles</Title>
-            <Col span={24}>
-              {state.resources.map((resource, index)=>
-                  <Tooltip key={index} title={resource.title} >
-                  <a ref='noreferrer' href={`http://emprendescena.cl:8000${resource.file_re}`} target="__blank">
-                  <FileTwoTone style={{fontSize:'40px', marginRight:'20px', marginBottom:'10px'}} />
-                  </a>
-                  </Tooltip>
-              )}
-            </Col>
-            {!is_approved &&
-                <Evaluation questions={state.questions}  />
-            }
-            </Row>
-
-          }
+        <Col xs={22} lg={8} style={{padding:'30px'}}>
+          {state.modules && <NavigateMenuCourse  course={id_module}  modules={state.modules} setState={setState} state={state} />}
+          {!is_approved && <>
+          {state.questions && 
+            <Evaluation questions={state.questions} /> 
+          }</>
+         }
         </Col>
-        <Col span={13} >
-          {state.videos && 
-            <>
-              <Steps style={{marginBottom:'20px', marginLeft:'25px'}} current={state.current} onChange={(step)=>setState({...state, current: step})}>
-                {state.videos.map((video)=><Step key={video.id} title={video.title}  />)}
-              </Steps>
-              {state.videos.map((video, index)=>
-                <>
-                  {index === state.current &&
-                    <ReactPlayer controls={true} key={index}  style={{marginBottom:'20px', marginLeft:'25px'}}  url={video.url} />
-                  }
-                </>
-              )}
-            </>
-          }
+        <Col lg={13} xs={22} >
+          <RetrieveVideo promotional_video={state.promotional_video} 
+                  file_promotional={state.file_promotional}
+                  description={state.promotional_description} 
+                  video={state.video} 
+                  resources={state.resources} />
         </Col>
       </Row>
     </>

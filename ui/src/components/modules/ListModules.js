@@ -7,9 +7,9 @@ import { EditOutlined, BookOutlined, CheckSquareFilled } from '@ant-design/icons
 import { ModulesContext } from '../../containers/Modules'
 import { AuthContext } from '../../App'
 
-const { Paragraph } = Typography
+const { Paragraph, Title } = Typography
 
-const ListModules = () => {
+const ListModules = ({is_free}) => {
   
   const initialState = {
      courses:null,
@@ -22,17 +22,30 @@ const ListModules = () => {
   const { dispatch } = useContext(ModulesContext)
   
   const { dispatch:dispatchProfile ,state:profile } = useContext(AuthContext)
-  const APPROVED_COURSES = profile.approved_courses
+  const approved_courses = profile.approved_courses
+  console.log(approved_courses)
 
   useEffect(()=>{
     const get_courses_all = async() => {
-      const request = await api.courses.get_courses().then((response)=>{
+
+      if(is_free){
+        const request = await api.courses.get_courses().then((response)=>{
           setState({
             ...state,
             courses: response.results,
             loading: false
           }) 
-      })
+        })
+      }else {
+        const request = await api.courses.get_courses_authorized().then((response)=>{
+          setState({
+            ...state,
+            courses: response.results,
+            loading: false
+          }) 
+        })
+      }       
+
       const get_profile = await api.user.get_profile(profile.user.username).then((response)=>{
         const access_token = JSON.parse(localStorage.getItem('access_token') || null)
         const user = response.user
@@ -45,7 +58,7 @@ const ListModules = () => {
         })
       
       })
-      return {request, get_profile}
+      return { get_profile}
     }
     get_courses_all()
   },[])
@@ -62,27 +75,11 @@ const ListModules = () => {
                 <Card 
                   key={obj.id}
                   hoverable
-                  style={{width:'500px'}}
-                  title={obj.title}
-                  extra={<Tag color='blue'>{obj.tutor_name}</Tag>}
+                  cover={ <img src={obj.image} style={styles.Image} alt={obj.tutor_name} /> }
+                  style={{width: window.innerWidth > 800 ? '350px':'100%', margin: window.innerWidth > 800 ? '20px': '0px'}}
                   bordered={false}
                   actions={[
                     <>                    
-                    {APPROVED_COURSES.map((approved)=>{                        
-                        const course_id = obj.id
-                        const approved_course = approved.course.id                        
-                        if(approved_course === course_id) {       
-                          approved_cour=true                   
-                          return(
-                            <Button disabled key={approved.course.id} type='dashed' syle={{color:'black'}} >
-                              <CheckSquareFilled style={{color:'green', fontSize:'20px'}} />
-                              Modulo Completado
-                            </Button>
-                          )
-                        }
-                      })
-                    }
-                    {!approved_cour &&
                       <Button 
                         type='primary'
                         onClick={()=>dispatch(
@@ -92,46 +89,22 @@ const ListModules = () => {
                             module:obj, 
                             id_module: obj.id,
                             is_approved: false
-                          })}><EditOutlined /> Realizar Modulo</Button>
-                      
-                    }
+                          })}><EditOutlined />Ingresar al contenido</Button>
                     </>,
-                    <>                    
-                    {APPROVED_COURSES.map((approved)=>{
-                      const course_id = obj.id
-                      const approved_course = approved.course.id
-
-                      if(approved_course  === course_id){
-                        return(
-                          <Button 
-                            type='primary' 
-                            key={approved.course.id}
-                            onClick={()=>dispatch(
-                              {
-                                type:'SET_VIEW', 
-                                is_retrieve:true, 
-                                module:obj, 
-                                id_module:obj.id,
-                                is_approved: true
-                              })}>
-                              <BookOutlined />
-                              Ver Contenidos
-                          </Button>
-                        )
-                      }
-                    })}
-                    </>
-
                   ]}
                 >
                   <Row>
-                    <Col sm={8} >
-                      <Paragraph>{obj.description}</Paragraph> 
+                    <Col span={24}>
+                      <Title level={3}>{obj.title}  
+                      {approved_courses.filter(e => e.course.id === obj.id).length > 0 && 
+                        <CheckSquareFilled style={{marginLeft:'10px', color:'green'}} />
+                      }
+                      </Title>
                     </Col>
-                  <Col lg style={styles.ColImage}>
-                    <img src={obj.image} style={styles.Image} alt={obj.tutor_name} />
-                  </Col>
-                </Row>
+                    <Col span={24} >
+                      <Paragraph align={'justify'}>{obj.description}</Paragraph> 
+                    </Col>
+                  </Row>
               </Card>
             </Col>
           )
@@ -147,9 +120,7 @@ const styles = {
   Spin:{
   },
   Image: {
-    width:'110px',
-    border:'3px solid #001529',
-    borderRadius:'100%'
+    width:'100%',
   },
   ColImage: {
     marginTop:'-15px'

@@ -20,7 +20,6 @@ class User(ApiModel, AbstractUser):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username', 'first_name', 'last_name']
     
-    initial_test_performed = models.BooleanField(default=False)
     is_student = models.BooleanField(default=False)
     
     class Meta:
@@ -36,10 +35,8 @@ class User(ApiModel, AbstractUser):
 
 class ProfileUser(ApiModel):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    approved_courses = models.ManyToManyField('api.Course',
-            related_name='user_aproved_courses', blank=True)
-    shop_courses = models.ManyToManyField('api.Course',
-            related_name='user_shop_courses', blank=True)
+    approved_courses = models.ManyToManyField('api.ResultContest',
+            related_name='user_aproved_courses', blank=True, null=True)
     tests_performed = models.ManyToManyField('api.ResultTest',
             related_name='user_result_test', blank=True)
     

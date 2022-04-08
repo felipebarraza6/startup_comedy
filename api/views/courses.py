@@ -8,9 +8,37 @@ from rest_framework.permissions import (
 )
 
 from api.serializers import (RetrieveCourseModelSerializer,
-ResultContestModelSerializer, ListCourseModelSerializer)
-from api.models import Course, ResultContest
+ResultContestModelSerializer, ListCourseModelSerializer,
+ViewVideoModelSerializer, RetrieveViewVideo)
+from api.models import Course, ResultContest, ViewVideo
+from django_filters import rest_framework as filters
 
+
+
+class ViewVideoViewSet(viewsets.GenericViewSet,
+                        mixins.CreateModelMixin,
+                        mixins.ListModelMixin):
+
+    permission_classes = [IsAuthenticated]
+    queryset = ViewVideo.objects.all()
+    lookup = 'id'
+    filter_backends = (filters.DjangoFilterBackend,)
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return RetrieveViewVideo
+        else:
+            return ViewVideoModelSerializer
+
+    class ViewVideoFilters(filters.FilterSet):
+        class Meta:
+            model = ViewVideo
+            fields = {
+                'video': ['exact'],
+                'user': ['exact'],
+                'course': ['exact']
+            }
+    filterset_class = ViewVideoFilters
 
     
 class CourseViewSet(viewsets.GenericViewSet,
@@ -20,6 +48,7 @@ class CourseViewSet(viewsets.GenericViewSet,
     permission_classes = [IsAuthenticated]    
     queryset = Course.objects.all()
     lookup = 'id'
+    filter_backends = (filters.DjangoFilterBackend,)
 
     def get_serializer_class(self):
         if self.action == 'list':
@@ -28,6 +57,17 @@ class CourseViewSet(viewsets.GenericViewSet,
             return RetrieveCourseModelSerializer
         if self.action == 'finish':
             return ResultContestModelSerializer
+
+    class CourseFilters(filters.FilterSet):
+        class Meta:
+            model = Course
+            fields = {
+                'is_free': ['exact'],
+                'authorized_user': ['exact', 'contains']
+            }
+
+    filterset_class = CourseFilters
+    
 
     @action(detail=True, methods=['post'])
     def finish(self, request, *args, **kwargs):
@@ -45,3 +85,5 @@ class CourseViewSet(viewsets.GenericViewSet,
         serializer.is_valid(raise_exception=True)
         course = serializer.save()
         return Response({'status': 'OK'}, status=status.HTTP_200_OK)
+
+

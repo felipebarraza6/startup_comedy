@@ -22,19 +22,15 @@ class CourseModelSerializer(serializers.ModelSerializer):
         model = Course
         fields = (
             'id',
-            'title'
+            'title',
+            'created'
         )
 
 class ResultContestModelSerializer(serializers.ModelSerializer):
     course = CourseModelSerializer()
     class Meta:
         model = ResultContest
-        fields = (
-            'created',
-            'calification',
-            'code_travel',
-            'course'
-        )
+        fields = '__all__' 
 
 
 class ResultTestModelSerializer(serializers.ModelSerializer):
@@ -48,13 +44,11 @@ class ResultTestModelSerializer(serializers.ModelSerializer):
         )
 
 class ProfileModelSerializer(serializers.ModelSerializer):
-    tests_performed = ResultTestModelSerializer(many=True)
     approved_courses = ResultContestModelSerializer(many=True)
     class Meta:
         model = ProfileUser
         fields = (
             'approved_courses',
-            'tests_performed'
         )
 
 
@@ -70,13 +64,12 @@ class UserModelSerializer(serializers.ModelSerializer):
     class Meta:
         model=User
         fields = (
+            'id',
             'username', 
             'email',
             'first_name',
             'last_name',
-            'dni',
             'profile',
-            'initial_test_performed'
         )
 
 

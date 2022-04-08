@@ -12,7 +12,7 @@ const Profile = () => {
   const approved_courses = auth.user.profile.approved_courses
   const columns = [
     {
-      title: 'Modulo',
+      title: 'Curso',
       render: (obj) =><>
         {obj.course.title}
       </>
@@ -25,20 +25,6 @@ const Profile = () => {
         </Tag>
       </>
     },
-    {
-      title: 'Codigo - Viaje del Emprendedor',
-      render: (obj)=><>
-        <Tag color='cyan'>
-          {obj.code_travel}
-        </Tag>
-      </>
-    },
-    {
-      title:'Calificacion',
-      render: (obj) => <>
-        <Title level={5}>{obj.calification}</Title>
-      </>
-    }
   ]
   
 
@@ -46,7 +32,7 @@ const Profile = () => {
     <React.Fragment>
     <div style={styles.container}>
       <Row>
-        <Col>
+        <Col xs={24}>
           <PageHeader 
             title={`@${user.username}`}
             subTitle={user.email}
@@ -54,18 +40,15 @@ const Profile = () => {
         </Col>
       </Row>
       <Row >
-        <Col span={12} style={{paddingLeft:'15%', paddingTop:'5%'}}>
+    {window.innerWidth > 800 && <Col lg={12} xs={24} style={{paddingLeft:'15%', paddingTop:'5%'}}>
           <Avatar style={styles.avatar} size={200}>
             {user.first_name.slice(0,1)}{user.last_name.slice(0,1)}
           </Avatar> 
-        </Col>
-        <Col span={12}>
+        </Col>}
+        <Col lg={12} xs={22}>
           <Descriptions bordered layout='vertical'>
-            <Descriptions.Item label='Nombre' span={2}>
+            <Descriptions.Item label='Nombre' span={3}>
               {user.first_name} {user.last_name}
-            </Descriptions.Item>
-            <Descriptions.Item label='Rut'> 
-              {user.dni}
             </Descriptions.Item>
             <Descriptions.Item label='Email'>
               {user.email} 
@@ -73,13 +56,10 @@ const Profile = () => {
             <Descriptions.Item label='Usuario' span={2}>
               {user.username}
             </Descriptions.Item>
-            <Descriptions.Item label='Realizo el test inicial?' style={styles.descriptionTest} span={3} >
-              {user.initial_test_performed ? <><LikeFilled style={styles.Like} /> CALIFICACION: <Tag style={{fontSize:'20px', paddingTop:'5px', paddingBottom:'5px'}} color='green'> {user.profile.tests_performed[0].points_total}</Tag>  </>:<DislikeFilled style={styles.Dislike}   />}
-            </Descriptions.Item>
-          </Descriptions>
+            </Descriptions>
         </Col>
-        <Col style={styles.colTable} span={24}>
-          <Table title={()=> 'Modulos Aprobados'} 
+        <Col style={styles.colTable} xs={22} lg={24}>
+          <Table title={()=> 'Cursos Completados'} 
             dataSource={approved_courses} 
             columns={columns}
             bordered  

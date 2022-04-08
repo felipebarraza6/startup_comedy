@@ -182,52 +182,8 @@ const Login = () => {
                     />
                   </Form.Item>
                  
-                    Utilizaras pasaporte? <Checkbox checked={isPassport} onChange={(e)=>{
-                        setIsPassport(e.target.checked)
-                        if(e.target.checked === true) {
-                          setStatusRut(false)
-                        }
-                      }}   />                 
-                    {isPassport ?    
-                    <Form.Item
-                    name='rut'
-                    rules={[{ required: true, message: 'Debes completas este campo'}, {min:8, message:'Debes ingresar 8 digitos como minimo'}]}                                 
-                    validateStatus={statusRut ? 'error' : 'success' }                                        
-                  >
-                    <Input 
-                    type='text'                      
-                    placeholder='Ingresa tu pasaporte'                      
-                    name='rut'                    
-                    
-                    
-                  /></Form.Item>:
-                  <Form.Item
-                  name='rut'
-                  rules={[{ required: true, message: 'Debes completas este campo'}, {min:8, message:'Debes ingresar 8 digitos como minimo'}]}                                 
-                  validateStatus={statusRut ? 'error' : 'success' }       
-                  label="Agrega el (-) antes de tu digíto verificador"             
-                >
-                    <Input 
-                      type='text'                      
-                      placeholder='Rut (ej: 9876543-1)'                      
-                      name='rut'
-                      onError={true}                      
-                      onBlur={(e)=>{                          
-                          if(validate(e.target.value)){                                                                      
-                              setData({
-                                ...data,
-                                [e.target.name]: format(e.target.value)                                
-                              })                                                        
-                              setStatusRut(false)
-                              message.success('Rut correcto')
-                          }else{
-                              setStatusRut(true)
-                              message.error('Rut Incorrecto')
-                          }
-                        }}
-                    />
-                    </Form.Item>
-                  }                  
+                                     
+                                    
                   </>
                 }
                 <Form.Item
@@ -277,7 +233,7 @@ const Login = () => {
                 </Form.Item>
               </Form>
             </div>
-              <p style={{color:'white'}}>2021 - Emprende Escena</p>
+              <p style={{color:'white'}}>2022 - Startup Comedy</p>
           </div>
         </div>
     )

@@ -23,7 +23,7 @@ const Evaluation = ({questions})=> {
 
     return(
       <Modal 
-        title={`Evaluacion - ${module.title} (${module.tutor_name})`} 
+        title={`Evaluacion - ${module.title}`} 
         style={{top:'30px'}}
         width={'100%'}
         okText='ENVIAR RESPUESTAS'
@@ -45,11 +45,6 @@ const Evaluation = ({questions})=> {
             </Form.Item>
             
             )}
-            <Alert 
-              type='warning' 
-              message='Tienes multiples intentos hasta aprobar le evaluación...' 
-              showIcon 
-              closable />
           </Form>
       </Modal>
     )
@@ -111,7 +106,7 @@ const Evaluation = ({questions})=> {
 
 const styles = {
   Button: {
-    marginTop:'100px'
+    width:'100%',
   }
 }
 

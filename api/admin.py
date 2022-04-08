@@ -7,12 +7,16 @@ from django.contrib import admin
 from api.models import (User, Course, Video, Resource, QuestionCourse,
 AlternativeQuestion, ResultContest, Test, QuestionTest,
 AlternativeQuestionTest, AnswerTest, ResultTest, ProfileUser, PreRequisite,
-AnswerQuestion, Module)
+AnswerQuestion, Module, Blog, Comment, ViewVideo)
 
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
     list_display = ('id','first_name', 'last_name', 'email',)
+
+@admin.register(ViewVideo)
+class ViewVideo(admin.ModelAdmin):
+    list_display = ('id', 'user')
 
 @admin.register(ProfileUser)
 class ProfileUserAdmin(admin.ModelAdmin):
@@ -20,7 +24,7 @@ class ProfileUserAdmin(admin.ModelAdmin):
 
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ('id', 'title', 'code_trip')
+    list_display = ('id', 'title')
 
 @admin.register(PreRequisite)
 class PreRequisiteAdmin(admin.ModelAdmin):
@@ -75,3 +79,10 @@ class ResultTestAdmin(admin.ModelAdmin):
 class ModuleAdmin(admin.ModelAdmin):
     list_display = ("id", )
 
+@admin.register(Blog)
+class BlogAdmin(admin.ModelAdmin):
+    list_display = ("id", "title")
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ("id",)

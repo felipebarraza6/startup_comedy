@@ -1,7 +1,6 @@
 export const modules_reducer = (state, action) => {
-  
   switch(action.type){
-    
+
     case 'LOADING':
       return{
         ...state,
@@ -15,6 +14,12 @@ export const modules_reducer = (state, action) => {
         is_retrieve:action.is_retrieve,
         module: action.module || null,
         is_approved: action.is_approved
+      }
+
+    case 'SET_APPROVED':
+      return{
+        ...state,
+        is_approved:action.is_approved
       }
 
     default:

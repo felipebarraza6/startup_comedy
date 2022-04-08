@@ -1,17 +1,19 @@
 from django.db import models
 from api.models.utils import ApiModel
+from api.models.users import User
 
 
 class Course(ApiModel):
     title = models.CharField(max_length=200)
-    code_trip = models.CharField(max_length=600, blank=True, null=True)
     image = models.ImageField(blank=True, null=True)
     description = models.CharField(max_length=400, blank=True, null=True)
-    tutor_name = models.CharField(max_length=220, blank=True, null=True)
-    passing_score = models.IntegerField(blank=True, null=True)
-    tutor_text = models.CharField(max_length=2000, blank=True, null=True)
+    extra_txt = models.CharField(max_length=220, blank=True, null=True)
+    description_promotional = models.CharField(max_length=400, blank=True, null=True)
     promotional_video = models.CharField(max_length=2000, blank=True, null=True)
     is_free = models.BooleanField(default=False)
+    file_promotional = models.FileField(blank=True, null=True)
+    authorized_user = models.ManyToManyField(User, blank=True,
+            related_name="authorized_user_course", null=True)
 
 
     class Meta:
@@ -63,6 +65,14 @@ class Video(ApiModel):
 
     def __str__(self):
         return self.title
+
+class ViewVideo(ApiModel):
+    video = models.ForeignKey(Video, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return str(self.video)
 
 
 class Resource(ApiModel):

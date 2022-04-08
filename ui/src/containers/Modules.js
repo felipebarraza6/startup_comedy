@@ -6,7 +6,7 @@ import { modules_reducer } from '../reducers/modules'
 import DetailModule from '../components/modules/DetailModule'
 export const ModulesContext = React.createContext()
 
-const Modules = () => {
+const Modules = ({ is_free }) => {
   
   const initialState = {
     is_retrieve: false,
@@ -20,18 +20,10 @@ const Modules = () => {
 
   return(
     <>
-      <Row>
-        <Col>
-          <PageHeader 
-            title="Modulos"
-            subTitle={<>{state.is_retrieve ? `/ ${state.module.title}`:'Emprende Escena'}</>}
-          />
-        </Col>
-      </Row>
     <ModulesContext.Provider value={{state, dispatch}}>
         {state.is_retrieve ? 
             <DetailModule /> : 
-            <ListModules />}           
+            <ListModules is_free={is_free} />}           
     </ModulesContext.Provider>
     </>
   )

@@ -1,6 +1,9 @@
 from rest_framework import serializers
-from api.models import (Course, Resource, Video, QuestionCourse,
-AlternativeQuestion, ResultContest, AnswerQuestion, PreRequisite)
+from api.models import (Course, ViewVideo, Resource, Video, QuestionCourse,
+AlternativeQuestion, ResultContest, AnswerQuestion, PreRequisite, Module)
+
+from api.serializers import UserModelSerializer
+
 
 
 class ResultContestModelSerializer(serializers.ModelSerializer):
@@ -11,11 +14,8 @@ class ResultContestModelSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def validate(self, data):
-        correct_answers = 0
         course = data['course']
         user = data['user']
-        code_generate = user.first_name[0:2] + user.last_name[0:2] + user.dni[0:4] + course.code_trip
-        formating_code = code_generate.lower()
 
         if 'answers' in data:
             list_answers = data['answers']
@@ -29,46 +29,19 @@ class ResultContestModelSerializer(serializers.ModelSerializer):
                     answer = get_answer_instance
                 )
 
-                if get_answer_instance.is_correct:
-                    correct_answers+=1
+        ResultContest.objects.create(
+            course = course,
+            user = user,
+            is_approved = True
+        )
 
-        
-        if correct_answers == 1 or correct_answers == 2:
-            ResultContest.objects.create(
-                course = course,
-                user = user,
-                is_approved = False,
-                code_travel= formating_code,
-                calification = 4
-            )        
-        elif correct_answers == 3:
-            ResultContest.objects.create(
-                course = course,
-                user = user,
-                is_approved = False,
-                code_travel= formating_code,
-                calification = 5
-            )
-        elif correct_answers == 4:
-            ResultContest.objects.create(
-                course = course,
-                user = user,
-                is_approved = False,
-                code_travel= formating_code,
-                calification = 6
-            )        
-        elif(correct_answers == 5):
-            ResultContest.objects.create(
-                course = course,
-                user = user,
-                is_approved = False,
-                code_travel= formating_code,
-                calification = 7
-            )
-        else:
-            raise serializers.ValidationError('Curso Reprobado')
+        return data 
 
-        return data
+
+class ViewVideoModelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ViewVideo
+        fields = '__all__'
 
 class AlertnativeQuestionModelSerializer(serializers.ModelSerializer):
     class Meta:
@@ -88,6 +61,7 @@ class QuestionCourseModelSerializer(serializers.ModelSerializer):
         serializer = AlertnativeQuestionModelSerializer(instance=qs, many
                 = True)
         data = serializer.data
+
         return data
 
     class Meta:
@@ -98,16 +72,6 @@ class QuestionCourseModelSerializer(serializers.ModelSerializer):
             'alternatives'
         )
 
-
-class VideoModelSerializer(serializers.ModelSerializer):
-    class Meta:
-        model=Video
-        fields = (
-            'title',
-            'url'
-        )
-
-
 class ResourceModelSerializer(serializers.ModelSerializer):
     class Meta:
         model=Resource
@@ -115,6 +79,37 @@ class ResourceModelSerializer(serializers.ModelSerializer):
             'title',
             'file_re'
         )
+
+class VideoModelSerializer(serializers.ModelSerializer):
+    resources = serializers.SerializerMethodField('get_resources')
+    
+    def get_resources(self, video):
+        qs = Resource.objects.filter(class_video=video.id)
+        serializer = ResourceModelSerializer(instance =qs, many=True)
+        data = serializer.data
+        return data
+
+    class Meta:
+        model=Video
+        fields = (
+            'id',
+            'title',
+            'url',
+            'resources'
+        )
+
+class ModuleModelSerializer(serializers.ModelSerializer):
+    videos = serializers.SerializerMethodField('get_videos')
+
+    def get_videos(self, module):
+        qs = Video.objects.filter(module=module.id)
+        serializer = VideoModelSerializer(instance=qs, many=True)
+        data = serializer.data
+        return data
+
+    class Meta:
+        model = Module
+        fields = '__all__'
 
 
 class PreRequisiteModelSerializer(serializers.ModelSerializer):
@@ -124,47 +119,25 @@ class PreRequisiteModelSerializer(serializers.ModelSerializer):
 
 
 class ListCourseModelSerializer(serializers.ModelSerializer):
-    pre_requisites = serializers.SerializerMethodField('get_pre_requisite')
-
-    def get_pre_requisite(self, course):
-        qs = PreRequisite.objects.filter(course=course).first()
-        serializer = PreRequisiteModelSerializer(instance=qs, many=False)
-        data = serializer.data
-        return data
-
     class Meta:
         model = Course
-        fields = (
-            'id',
-            'title',
-            'image',
-            'description',
-            'tutor_name',
-            'pre_requisites',
-            'tutor_text'
-        )
+        fields = '__all__' 
 
 
 class RetrieveCourseModelSerializer(serializers.ModelSerializer):
-    resources = serializers.SerializerMethodField('get_resources')
-    videos = serializers.SerializerMethodField('get_videos')
+    modules = serializers.SerializerMethodField('get_modules')
     questions = serializers.SerializerMethodField('get_questions')
 
     def get_questions(self, course):
-        qs = QuestionCourse.objects.filter(course=course)
+        qs = QuestionCourse.objects.filter(course=course.id)
         serializer = QuestionCourseModelSerializer(instance=qs, many=True)
         data = serializer.data
         return data
 
-    def get_resources(self, course):
-        qs = Resource.objects.filter(course=course)
-        serializer = ResourceModelSerializer(instance=qs, many=True)
-        data = serializer.data
-        return data
 
-    def get_videos(self, course):
-        qs = Video.objects.filter(course=course)
-        serializer = VideoModelSerializer(instance=qs, many=True)
+    def get_modules(self, course):
+        qs = Module.objects.filter(course=course.id)
+        serializer = ModuleModelSerializer(instance=qs, many=True)
         data = serializer.data
         return data
 
@@ -173,11 +146,24 @@ class RetrieveCourseModelSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'title',
-            'code_trip',
             'image',
             'description',
-            'tutor_name',
-            'resources',
-            'videos',
-            'questions'
+            'extra_txt',
+            'modules',
+            'questions',
+            'promotional_video',
+            'description_promotional',
+            'file_promotional',
+            'is_free'
         )
+
+
+class RetrieveViewVideo(serializers.ModelSerializer):
+    course = ListCourseModelSerializer()
+    video = VideoModelSerializer()
+    user = UserModelSerializer()
+    class Meta:
+        model = ViewVideo
+        fields = '__all__'
+
+
