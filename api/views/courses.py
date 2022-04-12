@@ -9,7 +9,7 @@ from rest_framework.permissions import (
 
 from api.serializers import (RetrieveCourseModelSerializer,
 ResultContestModelSerializer, ListCourseModelSerializer,
-ViewVideoModelSerializer, RetrieveViewVideo)
+ViewVideoModelSerializer, RetrieveViewVideo, CourseModelSerializer)
 from api.models import Course, ResultContest, ViewVideo
 from django_filters import rest_framework as filters
 
@@ -43,6 +43,7 @@ class ViewVideoViewSet(viewsets.GenericViewSet,
     
 class CourseViewSet(viewsets.GenericViewSet,
                   mixins.RetrieveModelMixin, 
+                  mixins.UpdateModelMixin,
                   mixins.ListModelMixin):
 
     permission_classes = [IsAuthenticated]    
@@ -57,6 +58,8 @@ class CourseViewSet(viewsets.GenericViewSet,
             return RetrieveCourseModelSerializer
         if self.action == 'finish':
             return ResultContestModelSerializer
+        else:
+            return CourseModelSerializer
 
     class CourseFilters(filters.FilterSet):
         class Meta:

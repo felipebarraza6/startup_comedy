@@ -89,7 +89,7 @@ const ListModules = ({is_free}) => {
                             module:obj, 
                             id_module: obj.id,
                             is_approved: false
-                          })}><EditOutlined />Ingresar al contenido</Button>
+                          })}><EditOutlined />Ir al curso</Button>
                     </>,
                   ]}
                 >

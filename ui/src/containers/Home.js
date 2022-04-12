@@ -8,7 +8,8 @@ import { Layout, Menu, Spin, Row, Col } from 'antd'
 // Antd Icons
 import { CheckCircleOutlined,  
   BankOutlined, FileDoneOutlined, DollarCircleOutlined,
-  SafetyOutlined } from '@ant-design/icons'
+  SafetyOutlined, 
+  RocketOutlined} from '@ant-design/icons'
 
 //Build
 import logo from '../assets/img/white.png'
@@ -48,42 +49,40 @@ const Home = () =>{
                   mode="inline"
                   defaultSelectedKeys={['1']}
               >
-                <Menu.Item key="1" style={styles.menuItem} onClick={()=> {
-                    setReload(true)
-                    setTimeout(() => {
-                      setReload(false)
-                    }, 1000)
-                }}  icon={  
-                    <BankOutlined style={styles.icon} />
-                   }>
+                <Menu.Item key="1" 
+                    style={styles.menuItem} 
+                    icon={window.innerWidth < 800 && <BankOutlined />}
+                    onClick={()=> {
+                      setReload(true)
+                      setTimeout(() => {
+                        setReload(false)
+                      }, 1000)
+                  }}  >
                     <Link to="/">
-                      Cursos gratis 
+                      Cursos Gratis 
                      </Link>
                 </Menu.Item>                 
-                <Menu.Item key="2" style={styles.menuItem} onClick={()=> {
+                <Menu.Item key="2" 
+                    icon={window.innerWidth < 800 && <DollarCircleOutlined />}
+                    style={styles.menuItem} onClick={()=> {
                     setReload(true)
                     setTimeout(() => {
                       setReload(false)
                     }, 1000)
-                }} icon={<DollarCircleOutlined style={styles.icon} />}>
+                }} >
                     <Link to="/premium-courses">
-                      Cursos comprados 
+                      Cursos Comprados 
                      </Link>
                 </Menu.Item>
-                <Menu.Item style={styles.menuItem} icon={<FileDoneOutlined style={styles.icon} />} >
-                    <Link to="/blog">
-                      Blog
-                    </Link>
-                </Menu.Item>
-                {window.innerWidth > 800 &&
-                <Menu.Item style={styles.menuItem} icon={<CheckCircleOutlined style={styles.cion} />}>
+                                {window.innerWidth > 800 &&
+                <Menu.Item style={styles.menuItem} >
                     <Link to="/classes_held">
-                      Clases realizadas
+                      Clases Realizadas
                     </Link>
                 </Menu.Item>}
-                <Menu.Item style={styles.menuItem} icon={<SafetyOutlined style={styles.icon} />}>
+                <Menu.Item style={styles.menuItem} icon={window.innerWidth < 800 && <RocketOutlined /> } >
                     <Link to="/route">
-                      Cursos completados
+                      Cursos Completados
                     </Link>
                 </Menu.Item>
               </Menu>

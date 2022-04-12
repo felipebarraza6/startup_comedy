@@ -167,3 +167,13 @@ class RetrieveViewVideo(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class CourseModelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Course
+        fields = '__all__'
+
+
+
+
+
+

@@ -103,7 +103,6 @@ class UserSignUpSerializer(serializers.Serializer):
         validators=[UniqueValidator(queryset=User.objects.all(), message="el usuario ya existe, prueba con otro nombre.")]
     )
 
-    dni = serializers.CharField(max_length=12, validators=[UniqueValidator(queryset=User.objects.all(), message='el rut ya existe, prueba con otro rut.')])
     first_name = serializers.CharField()
     last_name = serializers.CharField()
     # Password

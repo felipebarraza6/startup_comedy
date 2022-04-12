@@ -19,11 +19,21 @@ services:
 
     django: &django
         build: 
-            context: ./learning_escena
-        image: api_escena
+            context: ./learning
+        image: api_learning
         ports:
           - "8000:8000"
         depends_on:
             - postgres
         volumes:
             - .:/code     
+
+    react:
+        build: ./ui
+        image: learning_ui
+        ports:
+          - "80:80"
+
+        depends_on:
+            - django
+                    
