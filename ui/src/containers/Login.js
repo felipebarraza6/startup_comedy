@@ -46,10 +46,15 @@ const Login = () => {
     }
     
     const handleFormSubmit = async(formData) => {        
-
+        
         if(data.createUser){
+          formData = {
+            ...formData,
+            'username':formData.username.toLowerCase()
+          }
           var passwd = formData.password
           var passwd_val = formData.password_confirmation
+          
           if (passwd !== passwd_val){
             message.warning('Las contraseñas no coinciden!')
           }else {
@@ -218,16 +223,27 @@ const Login = () => {
                       type="password"
                       placeholder="Confirmacion de contraseña"
                       value={data.password_confirmation}
-                      name="password_confirmation"
+                      name="passord_confirmation"
                       onChange = {handleInputChange}
                     />
                   </Form.Item>
                }
                 <Form.Item>
                   {data.isSubmitting ? <Spin />
-                    : <Button type="primary" htmlType="submit" className="login-form-button">Aceptar</Button>}
+                    : <Button type="primary" htmlType="submit" className="login-form-button">{data.createUser ? 'Crear':'Ingresar'}</Button>}
                   
                 </Form.Item>
+                <Form.Item>
+                  {data.createUser ? <Button type='primary' onClick={()=> setData({...data, createUser: false})}>Iniciar sesion</Button>:
+                  <Button onClick={()=> {
+                    setData({
+                      ...data,
+                      createUser: true
+                    })
+                  }} type="primary" className="login-form-button">Crear Usuario</Button>
+                  }
+                </Form.Item>
+
               </Form>
             </div>
               <p style={{color:'white'}}>2022 - Startup Comedy</p>

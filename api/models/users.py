@@ -14,8 +14,6 @@ class User(ApiModel, AbstractUser):
         'email',
         unique = True,
     )
-    
-    phone = models.CharField(max_length=200, unique = True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username', 'first_name', 'last_name']

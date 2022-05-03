@@ -19,6 +19,7 @@ const DetailModule = () => {
     questions: null,
     title: null,
     video: null,
+    is_last: false,
     resources: null,
     promotional_video: null,
     promotional_description: null,
@@ -37,7 +38,6 @@ const DetailModule = () => {
 
     async function get_module_retrieve(id_module) {
       const request = await api.courses.get_retrieve_course(id_module).then((response)=> {
-        console.log(response.questions)
         approved_courses.filter((element)=> { 
             if(element.course.id===id_module) { 
               dispatch({
@@ -65,6 +65,7 @@ const DetailModule = () => {
 
   }, [])
 
+  console.log(state)
 
   return(
     <>
@@ -95,18 +96,20 @@ const DetailModule = () => {
       <Row>
         <Col xs={22} lg={8} style={{padding:'30px'}}>
           {state.modules && <NavigateMenuCourse  course={id_module}  modules={state.modules} setState={setState} state={state} />}
-          {!is_approved && <>
-          {state.questions && 
-            <Evaluation questions={state.questions} /> 
-          }</>
-         }
-        </Col>
+                  </Col>
         <Col lg={13} xs={22} >
           <RetrieveVideo promotional_video={state.promotional_video} 
                   file_promotional={state.file_promotional}
                   description={state.promotional_description} 
                   video={state.video} 
                   resources={state.resources} />
+          {state.is_last && <> 
+            {!is_approved && <>
+              {state.questions && 
+                <Evaluation questions={state.questions} /> 
+              }</>
+            }</>
+          }
         </Col>
       </Row>
     </>

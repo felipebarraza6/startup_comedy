@@ -22,8 +22,11 @@ const NavigateMenuCourse = ({ modules, setState, state, course }) => {
 
   return(<Menu mode='inline' defaultOpenKeys={['1', '2', '3', '4', '5', '6']}>
         <Menu.Item onClick={()=>setState({...state, video:null, resources:null})}>INTRODUCCIÓN</Menu.Item>
-        {modules.map((x)=> <Menu.SubMenu icon={<AudioOutlined />} title={x.title} key={x.id}>
-            {x.videos.map((z)=>
+        {modules.map((x, index)=> { 
+          
+          return(
+          <Menu.SubMenu icon={<AudioOutlined />} title={x.title} key={x.id}>
+            {x.videos.map((z, index)=>
               <Menu.Item key={z.id} 
                 icon={views && <>{views.filter(e=>e.video.id === z.id).length>0 && <CheckCircleOutlined style={styles.icon} />}</>}
                 onClick={async()=> {
@@ -36,18 +39,27 @@ const NavigateMenuCourse = ({ modules, setState, state, course }) => {
                       getViews()
                     })
                   }
+                  var last_id = modules[modules.length-1].videos[x.videos.length-1].id
+                  var last_bool = false
+                  if(last_id === z.id){
+                    last_bool = true
+                  }else {
+                    last_bool = false
+                  }
+                  
                   setState({
                     ...state,
                     video: { 
                       title: z.title,
                       url: z.url 
                     },
+                    is_last: last_bool,
                     resources: z.resources
                   })}}>
                
                 {z.title}
               </Menu.Item>)}
-          </Menu.SubMenu>)}
+          </Menu.SubMenu>) })}
     </Menu>)
 
 }

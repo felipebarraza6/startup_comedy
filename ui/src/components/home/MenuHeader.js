@@ -1,8 +1,9 @@
 import React, { useContext }  from 'react' 
 
-import { Menu, Tag, Layout } from 'antd'
+import { Menu, Tag, Layout, Button } from 'antd'
 import { LogoutOutlined, UserOutlined } from '@ant-design/icons'
 import { Link } from 'react-router-dom' 
+import ModalNewCourse from './ModalNewCourse'
 import logo from '../../assets/img/white.png'
 //Auth Context
 import { AuthContext } from '../../App'
@@ -30,8 +31,7 @@ const MenuHeader = () => {
                 </Menu.Item>
                 {window.innerWidth > 800 &&
                 <Menu.Item style = {styles.menuNoHovereable}  >
-                  <Tag color='geekblue' >{state.user.first_name}</Tag>
-                  <Tag color='geekblue' >{state.user.last_name}</Tag>
+                  <ModalNewCourse />
                 </Menu.Item>}
                 <Menu.Item onClick={Logout}>
                     <LogoutOutlined />

@@ -6,6 +6,24 @@ from api.serializers import UserModelSerializer
 
 
 
+class ResultContestOnly(serializers.ModelSerializer):
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    class Meta:
+        model = ResultContest
+        fields = '__all__'
+
+    def validate(self, data):
+        course = data['course']
+        user = data['user']
+        
+        ResultContest.objects.create(
+            course = course,
+            user = user,
+            is_approved = True
+        )
+    
+        return data
+
 class ResultContestModelSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     answers = serializers.ListField()
@@ -154,6 +172,7 @@ class RetrieveCourseModelSerializer(serializers.ModelSerializer):
             'promotional_video',
             'description_promotional',
             'file_promotional',
+            'authorized_user',
             'is_free'
         )
 

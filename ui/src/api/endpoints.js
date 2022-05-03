@@ -1,4 +1,4 @@
-import { POST_LOGIN, GET, POST} from './config'
+import { POST_LOGIN, GET, POST, UPDATE} from './config'
 
 
 const get_courses = async() => {
@@ -36,6 +36,12 @@ const finish_course = async(course, answers) => {
 
 }
 
+const finish_only = async(course) => {
+  const request = await POST(`courses/${course}/finish_only/`)
+  return request.data
+
+}
+
 const get_retrieve_course = async(id) => {
   const request = await GET(`courses/${id}/`)
   return request.data
@@ -60,6 +66,11 @@ const create_comment = async(data) => {
 const get_initial_test = async() => {
   const request = await GET('tests/1/')
   return request.data
+}
+
+const update_course = async(id, data) => {
+  const request = await UPDATE(`courses/${id}/`, data)
+  return request
 }
 
 const get_profile = async(user)=> {
@@ -103,7 +114,9 @@ const api = {
   courses: {
     get_courses,
     finish_course,
+    finish_only,
     get_retrieve_course,
+    update_course,
     get_courses_authorized
   },
   viewsVideo: {

@@ -1,5 +1,7 @@
 import React, { useState, useContext } from 'react'
-import { notification, Button, Modal, Alert, Form, Select } from 'antd'
+import { notification, Button, Modal, 
+          Alert, Form, Select,
+          Row, Col} from 'antd'
 import { FormOutlined } from '@ant-design/icons'
 import { ModulesContext } from '../../containers/Modules'
 import api from '../../api/endpoints'
@@ -23,7 +25,7 @@ const Evaluation = ({questions})=> {
 
     return(
       <Modal 
-        title={`Evaluacion - ${module.title}`} 
+        title={`Ayudanos respondiendo está encuesta - ${module.title}`} 
         style={{top:'30px'}}
         width={'100%'}
         okText='ENVIAR RESPUESTAS'
@@ -74,7 +76,7 @@ const Evaluation = ({questions})=> {
               is_retrieve: false 
             })
             notification.success({
-              message: 'Curso Completado',
+              message: 'Gracias por responder la encuesta',
               description: `${module.title}`
             })
             setLoading(false)
@@ -92,12 +94,29 @@ const Evaluation = ({questions})=> {
 
       }}
     >
+      <Row align='center'>
       <Button style={styles.Button}  
         type='primary' 
         onClick={showModal}>
           <FormOutlined /> 
-          Relizar Evaluacion
+          Contestar Encuesta
       </Button>
+      <Button style={styles.Button} type='primary' danger 
+        onClick={()=> {
+          const rq = api.courses.finish_only(module.id).then((r)=> {
+            dispatch({
+              type:'SET_VIEW',
+              is_retrieve: false 
+            })
+            notification.success({
+              message: 'Curso Completado :)',
+              description: `${module.title}`
+            })
+            setLoading(false)
+ 
+          })
+        }}>Finalizar Curso</Button>
+      </Row>
       <ModalForm visible={visible} onCancel={onCancel}/>
     </Form.Provider>
   )
@@ -106,7 +125,8 @@ const Evaluation = ({questions})=> {
 
 const styles = {
   Button: {
-    width:'100%',
+    width:'30%',
+    margin:'5px'
   }
 }
 

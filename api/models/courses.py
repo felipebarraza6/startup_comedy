@@ -4,6 +4,7 @@ from api.models.users import User
 
 
 class Course(ApiModel):
+    id = models.CharField(max_length=300, primary_key=True, editable=True)
     title = models.CharField(max_length=200)
     image = models.ImageField(blank=True, null=True)
     description = models.CharField(max_length=400, blank=True, null=True)

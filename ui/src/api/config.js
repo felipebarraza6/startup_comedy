@@ -43,3 +43,18 @@ export const POST = async (endpoint, data) =>{
     return response
 }
 
+export const UPDATE = async (endpoint, data) =>{
+    const token = JSON.parse(localStorage.getItem('access_token') || null)
+
+    const options = {
+        headers: {
+            Authorization: `Token ${token}`
+        }
+    }
+
+    const response = INSTANCE.patch(endpoint, data, options)
+
+    return response
+
+}
+
