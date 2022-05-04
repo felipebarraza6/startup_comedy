@@ -47,8 +47,20 @@ const Home = () =>{
               <Menu 
                   theme="dark" 
                   mode="inline"
-                  defaultSelectedKeys={['1']}
+                  defaultSelectedKeys={['2']}
               >
+              <Menu.Item key="2" 
+                    icon={window.innerWidth < 800 && <DollarCircleOutlined />}
+                    style={styles.menuItem} onClick={()=> {
+                    setReload(true)
+                    setTimeout(() => {
+                      setReload(false)
+                    }, 1000)
+                }} >
+                    <Link to="/">
+                      Cursos Comprados 
+                     </Link>
+                </Menu.Item>
                 <Menu.Item key="1" 
                     style={styles.menuItem} 
                     icon={window.innerWidth < 800 && <BankOutlined />}
@@ -58,22 +70,11 @@ const Home = () =>{
                         setReload(false)
                       }, 1000)
                   }}  >
-                    <Link to="/">
+                    <Link to="/free-courses">
                       Cursos Gratis 
                      </Link>
                 </Menu.Item>                 
-                <Menu.Item key="2" 
-                    icon={window.innerWidth < 800 && <DollarCircleOutlined />}
-                    style={styles.menuItem} onClick={()=> {
-                    setReload(true)
-                    setTimeout(() => {
-                      setReload(false)
-                    }, 1000)
-                }} >
-                    <Link to="/premium-courses">
-                      Cursos Comprados 
-                     </Link>
-                </Menu.Item>
+                
                                 {window.innerWidth > 800 &&
                 <Menu.Item style={styles.menuItem} >
                     <Link to="/classes_held">
@@ -100,13 +101,13 @@ const Home = () =>{
                     <Route exact path='/'>
                       <Col style={{ margin:'20px'}}>
                       {!reload ?  
-                        <Modules is_free={true} />: <center><Spin size='large' /></center>
+                        <Modules is_free={false} />: <center><Spin size='large' /></center>
                       }</Col>
                     </Route>
                     <Col style={{margin:'20px'}} >
-                    <Route exact path='/premium-courses'>
+                    <Route exact path='/free-courses'>
                       {!reload ? 
-                        <Modules is_free={false} />: <center><Spin size='large' /></center>
+                        <Modules is_free={true} />: <center><Spin size='large' /></center>
                       }
                     </Route>
                     </Col>

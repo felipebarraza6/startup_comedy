@@ -21,9 +21,7 @@ const ModalNewCourse = () => {
     version: "wc/v3"
   })
 
-
-  return(<><Modal visible={visible} onCancel={()=>setVisible(false)} title='AGREGAR CURSO COMPRADO' okText='AGREGAR'
-              onOk={async()=> {
+return(<><Modal visible={visible} width="400px" onCancel={()=>setVisible(false)} title='AGREGA TU NÚMERO DE PEDIDO QUE RECIBISTE EN TU E-MAIL' okText='ACTIVAR' onOk={async()=> {
                 data.items.map(async(x)=>{
                     const rq = await apil.courses.get_retrieve_course(x.product_id).then((rq)=> {
                       const rq2 = apil.courses.update_course(x.product_id, {"authorized_user": [
@@ -36,7 +34,7 @@ const ModalNewCourse = () => {
               } }
             >
 
-              <h4>CODIGO DE PEDIDO #{data.code}</h4>
+              <h4>NÚMERO DE PEDIDO #{data.code}</h4>
               <Input onChange={(e)=>setData({...data, code:e.target.value })} />
             <Button onClick={async()=> {
               setLoading(true)
@@ -49,12 +47,12 @@ const ModalNewCourse = () => {
                     items: response.data.line_items
                   })
                   }).catch((error) => {
-                    Modal.error({title:'NO SE ENCONTRO NINGUN PEDIDO CON EL CODIGO'})
+                    Modal.error({title:'NO SE ENCONTRO NINGUN PEDIDO CON ESE NUMERO'})
                     setData({...data, items:[]})
                     setLoading(false)
                   })
             }
-            } type='primary' style={{marginTop:'10px', marginBottom:'10px'}} size='small'>VALIDAR CODIGO</Button>
+            } type='primary' style={{marginTop:'10px', marginBottom:'10px'}} size='small'>VALIDAR PEDIDO</Button>
             {loading && <Spin  style={{marginLeft:'20px'}}/>}
             {data.items && <>
               <List
@@ -69,7 +67,7 @@ const ModalNewCourse = () => {
               />
               </>}
             </Modal>
-            <Button onClick={()=> setVisible(true)}>(+) AGREGAR CURSO COMPRADO</Button>
+            <Button type='primary' onClick={()=> setVisible(true)}>ACTIVA TU PEDIDO AQUÍ (CURSO)</Button>
         </>)
 
 }
