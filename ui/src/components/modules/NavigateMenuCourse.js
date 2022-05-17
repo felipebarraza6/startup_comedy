@@ -21,7 +21,6 @@ const NavigateMenuCourse = ({ modules, setState, state, course }) => {
 
 
   return(<Menu mode='inline' defaultOpenKeys={['1', '2', '3', '4', '5', '6']}>
-        <Menu.Item onClick={()=>setState({...state, video:null, resources:null})}>INTRODUCCIÓN</Menu.Item>
         {modules.map((x, index)=> { 
           
           return(

@@ -10,6 +10,8 @@ const { Title, Paragraph } = Typography
 const RetrieveVideo = ({file_promotional,video,resources,promotional_video, description}) => {
   
   const { state } = useContext(AuthContext)
+  console.log(promotional_video)
+  console.log(video)
 
   return(<>
       <Row>

@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 
-const BASE_URL = 'http://localhost:8000'
+const BASE_URL = 'http://app.startupcomedy.org:8000/'
 
 
 export const INSTANCE = axios.create({

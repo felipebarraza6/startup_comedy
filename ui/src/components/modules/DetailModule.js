@@ -65,7 +65,6 @@ const DetailModule = () => {
 
   }, [])
 
-  console.log(state)
 
   return(
     <>
@@ -98,11 +97,13 @@ const DetailModule = () => {
           {state.modules && <NavigateMenuCourse  course={id_module}  modules={state.modules} setState={setState} state={state} />}
                   </Col>
         <Col lg={13} xs={22} >
-          <RetrieveVideo promotional_video={state.promotional_video} 
+          {state.modules && 
+          <RetrieveVideo promotional_video={state.modules[0].videos[0].url} 
                   file_promotional={state.file_promotional}
                   description={state.promotional_description} 
                   video={state.video} 
                   resources={state.resources} />
+          }
           {state.is_last && <> 
             {!is_approved && <>
               {state.questions && 
