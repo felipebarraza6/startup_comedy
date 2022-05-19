@@ -47,21 +47,9 @@ const Home = () =>{
               <Menu 
                   theme="dark" 
                   mode="inline"
-                  defaultSelectedKeys={['2']}
+                  defaultSelectedKeys={['1']}
               >
-              <Menu.Item key="2" 
-                    icon={window.innerWidth < 800 && <DollarCircleOutlined />}
-                    style={styles.menuItem} onClick={()=> {
-                    setReload(true)
-                    setTimeout(() => {
-                      setReload(false)
-                    }, 1000)
-                }} >
-                    <Link to="/">
-                      Cursos Comprados 
-                     </Link>
-                </Menu.Item>
-                <Menu.Item key="1" 
+                              <Menu.Item key="1" 
                     style={styles.menuItem} 
                     icon={window.innerWidth < 800 && <BankOutlined />}
                     onClick={()=> {
@@ -70,10 +58,23 @@ const Home = () =>{
                         setReload(false)
                       }, 1000)
                   }}  >
-                    <Link to="/free-courses">
+                    <Link to="/">
                       Cursos Gratis 
                      </Link>
                 </Menu.Item>                 
+            <Menu.Item key="2" 
+                    icon={window.innerWidth < 800 && <DollarCircleOutlined />}
+                    style={styles.menuItem} onClick={()=> {
+                    setReload(true)
+                    setTimeout(() => {
+                      setReload(false)
+                    }, 1000)
+                }} >
+                    <Link to="/buy">
+                      Cursos Comprados 
+                     </Link>
+                </Menu.Item>
+
                 
                                 {window.innerWidth > 800 &&
                 <Menu.Item style={styles.menuItem} >
@@ -98,14 +99,14 @@ const Home = () =>{
               <div style={styles.content}>
                   <Switch>  
                   <Row align='center'>
-                    <Route exact path='/'>
+                    <Route exact path='/buy'>
                       <Col style={{ margin:'20px'}}>
                       {!reload ?  
                         <Modules is_free={false} />: <center><Spin size='large' /></center>
                       }</Col>
                     </Route>
                     <Col style={{margin:'20px'}} >
-                    <Route exact path='/free-courses'>
+                    <Route exact path='/'>
                       {!reload ? 
                         <Modules is_free={true} />: <center><Spin size='large' /></center>
                       }
