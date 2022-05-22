@@ -130,7 +130,7 @@ const Login = () => {
      <>
       <Row>
           <Button style={{margin:'20px'}} type='dashed'>
-              <a href='https://startupcomedy.org'>VOLVER A STARTUPCOMEDY.ORG</a></Button>
+              <a href='https://startupcomedy.org'>Volver</a></Button>
         </Row>
         <div className="general-login">
         

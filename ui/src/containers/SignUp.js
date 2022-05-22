@@ -230,7 +230,7 @@ const SignUp = () => {
                 <Form.Item>
                   {data.isSubmitting ? <Spin />
                     : <Button type="primary" htmlType="submit" className="login-form-button">{data.createUser ? 'Crear':'Ingresar'}</Button>}
-                  <Button type='ghost' style={{marginLeft:'10px'}} htmlType="submit" className="login-form-button"><a href='https://startupcomedy.org'>VOLVER A STARTUPCOMEDY.ORG</a></Button>
+                  <Button type='ghost' style={{marginLeft:'10px'}} htmlType="submit" className="login-form-button"><a href='https://startupcomedy.org'>Volver</a></Button>
                 </Form.Item>
                               </Form>
             </div>
