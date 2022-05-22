@@ -5,6 +5,8 @@ import './App.css'
 
 import Home from './containers/Home'
 import Login from './containers/Login'
+import SignUp from './containers/SignUp'
+import { BrowserRouter, Route, Link, Switch } from 'react-router-dom'
 export const AuthContext = React.createContext()
 
 
@@ -54,12 +56,22 @@ function App() {
         dispatch
       }}
     >
-      {state.isAuthenticated ?
+      <BrowserRouter>
+      <Switch>
+        <Route exact path='/signup'>
+          <SignUp />
+        </Route>
+        <Route exact path='/'>
+          {state.isAuthenticated ?
         <Home />:
         <Login />
 
       }
-    </AuthContext.Provider>
+
+        </Route>
+      </Switch>
+      </BrowserRouter>
+          </AuthContext.Provider>
   )
 }
 

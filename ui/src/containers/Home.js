@@ -36,6 +36,11 @@ const Home = () =>{
         return(
           <BrowserRouter>
             <Layout style={{ minHeight: '100vh' }}>            
+<Row>
+          <Col>
+          as
+          </Col>
+          </Row>
             <Sider collapsed={window.innerWidth > 800 ? false:true} width='250px'>
               <div style={{padding:'10px', paddingTop: window.innerWidth > 800 ? '20px': '50px'}}>
                 
@@ -99,6 +104,7 @@ const Home = () =>{
               <div style={styles.content}>
                   <Switch>  
                   <Row align='center'>
+                    
                     <Route exact path='/buy'>
                       <Col style={{ margin:'20px'}}>
                       {!reload ?  

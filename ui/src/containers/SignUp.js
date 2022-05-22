@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Row,Col,Form, Input, Button, Checkbox, Spin, message, notification } from 'antd';
+import { Form, Input, Button, Checkbox, Spin, message, notification } from 'antd';
 
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 
@@ -13,7 +13,7 @@ import '../assets/css/login.css'
 import api from '../api/endpoints'
 
 
-const Login = () => {   
+const SignUp = () => {   
     const { dispatch } = React.useContext(AuthContext)
     const [form] = Form.useForm();
     const [statusRut, setStatusRut] = React.useState(false)
@@ -29,7 +29,7 @@ const Login = () => {
         isSubmitting: false,
         errorMessage: null,
         user:null,
-        createUser: false
+        createUser: true
     }
 
     const [data, setData] = React.useState(initialState)
@@ -72,6 +72,8 @@ const Login = () => {
                 createUser: false
               })
               message.info(`Usuario creado: ${response.email}`)
+
+            window.location.assign('/')
 
             })).catch((error)=> {
               var errors = error.response.data
@@ -127,16 +129,11 @@ const Login = () => {
         }
         
    return(
-     <>
-      <Row>
-          <Button style={{margin:'20px'}} type='dashed'>
-              <a href='https://startupcomedy.org'>VOLVER A STARTUPCOMEDY.ORG</a></Button>
-        </Row>
         <div className="general-login">
-        
           <div className="login-container">
             <img src={logo} style={{width:'100%'}} alt='logo' />
             <div className="login">
+                <center><h3 style={{margin:'20px'}}>REGISTRATE Y ACCEDE AL CURSO GRATIS</h3></center>
               <Form
                 onFinish = { handleFormSubmit }
                 name="normal_login"
@@ -156,7 +153,6 @@ const Login = () => {
                     onChange={handleInputChange}                                       
                   />
                 </Form.Item>
-                {data.createUser &&
                   <>
                   <Form.Item
                     name="username"
@@ -196,7 +192,6 @@ const Login = () => {
                                      
                                     
                   </>
-                }
                 <Form.Item
                   name="password"
                   rules={[
@@ -215,7 +210,6 @@ const Login = () => {
 
                   />
                 </Form.Item>
-               {data.createUser && 
                   <Form.Item
                     name="password_confirmation"
                     rules={[
@@ -233,30 +227,18 @@ const Login = () => {
                       onChange = {handleInputChange}
                     />
                   </Form.Item>
-               }
                 <Form.Item>
                   {data.isSubmitting ? <Spin />
                     : <Button type="primary" htmlType="submit" className="login-form-button">{data.createUser ? 'Crear':'Ingresar'}</Button>}
-                  
+                  <Button type='ghost' style={{marginLeft:'10px'}} htmlType="submit" className="login-form-button"><a href='https://startupcomedy.org'>VOLVER A STARTUPCOMEDY.ORG</a></Button>
                 </Form.Item>
-                <Form.Item>
-                  {data.createUser ? <Button type='primary' onClick={()=> setData({...data, createUser: false})}>Iniciar sesion</Button>:
-                  <Button onClick={()=> {
-                    setData({
-                      ...data,
-                      createUser: true
-                    })
-                  }} type="primary" className="login-form-button">Crear Usuario</Button>
-                  }
-                </Form.Item>
-
-              </Form>
+                              </Form>
             </div>
               <p style={{color:'white'}}>2022 - Startup Comedy</p>
           </div>
         </div>
-     </>
     )
 }
 
-export default Login
+
+export default SignUp
