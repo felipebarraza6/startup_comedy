@@ -21,7 +21,7 @@ services:
             POSTGRES_DB: api
 
     nginx_proxy:
-        image: jwilder/nginx-proxy
+        image: bbtsoftwareag/nginx-proxy-unrestricted-requestsize
         restart: always
         ports:
           - "80:80"
@@ -49,14 +49,14 @@ services:
 
     django: &django
         build: 
-            context: ./learning_escena
-        image: api_escena
+            context: ./learning
+        image: api_learning
         expose:
           - "80"
         environment:
-            - VIRTUAL_HOST=api.emprendescena.cl,www.api.emprendescena.cl
-            - LETSENCRYPT_HOST=api.emprendescena.cl,www.api.emprendescena.cl
-            - LETSENCRYPT_EMAIL=api@emprendescena.cl
+            - VIRTUAL_HOST=api.academiastartupcomedy.cl,www.api.academiastartupcomedy.cl
+            - LETSENCRYPT_HOST=api.academiastartupcomedy.cl,www.api.academiastartupcomedy.cl
+            - LETSENCRYPT_EMAIL=api@academiastartupcomedy.cl
         
         depends_on:
             - nginx_proxy
@@ -68,13 +68,13 @@ services:
 
     react:
         build: ./ui
-        image: emprendeescena_ui
+        image: learning_ui
         expose:
             - "80"
         environment:
-            - VIRTUAL_HOST=emprendescena.cl,www.emprendescena.cl
-            - LETSENCRYPT_HOST=emprendescena.cl,www.emprendescena.cl
-            - LETSENCRYPT_EMAIL=app@emprendescena.cl
+            - VIRTUAL_HOST=academiastartupcomedy.cl,www.academiastartupcomedy.cl
+            - LETSENCRYPT_HOST=academiastartupcomedy.cl,www.academiastartupcomedy.cl
+            - LETSENCRYPT_EMAIL=app@academiastartupcomedy.cl
         depends_on:
             - django
             - nginx_proxy

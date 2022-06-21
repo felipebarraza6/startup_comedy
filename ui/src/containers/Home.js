@@ -38,7 +38,6 @@ const Home = () =>{
             <Layout style={{ minHeight: '100vh' }}>            
 <Row>
           <Col>
-          as
           </Col>
           </Row>
             <Sider collapsed={window.innerWidth > 800 ? false:true} width='250px'>
